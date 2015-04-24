@@ -1,0 +1,15 @@
+{
+    "name": "plagtracker/api-client",
+    "description": "php client for api.plagtracker.com",
+	
+    "require": {
+        "php": ">=5.4",
+        "ext-curl": "*"
+    },
+	
+    "autoload": {
+        "psr-4": {
+            "Plagtracker\\" : "library/Plagtracker"
+        }
+    }
+}
