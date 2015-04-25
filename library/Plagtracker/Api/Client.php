@@ -16,12 +16,13 @@ class Client
      *
      * @param string $login
      * @param string $password 
+     * @param string $apiDomain 
      */
-    public function __construct($login, $password, $api_domain = 'api.plagtracker.com')
+    public function __construct($login, $password, $apiDomain = 'api.plagtracker.com')
     {
         $this->login = $login;
         $this->password = $password;
-        $this->apiDomain = $api_domain;
+        $this->apiDomain = $apiDomain;
     }
 
     /**
@@ -41,12 +42,10 @@ class Client
      */
     public function addTextForChecking($text)
     {
-        $response = $this->execHttpRequest(
+        return $this->execHttpRequest(
             $this->makeUrl('api/text'), 
             'text=' . urlencode($text)
         );
-
-        return $this->makeResponse($response);
     }
     /**
      * Add url for checking
@@ -56,12 +55,10 @@ class Client
      */
     public function addUrlForChecking($url)
     {
-        $response = $this->execHttpRequest(
+        return $this->execHttpRequest(
             $this->makeUrl('api/url'), 
             'url=' . urlencode($url)
         );
-
-        return $this->makeResponse($response);
     }
     
     /**
@@ -84,12 +81,10 @@ class Client
             throw new \Exception('Maximum size of uploading document is 10 MB.');
         }
                 
-        $response = $this->execHttpRequest(
+        return $this->execHttpRequest(
             $this->makeUrl('api/file'), 
             'file[name]='.urlencode(basename($filePath)) . '&file[data]='.urlencode(base64_encode($fileData))
         );
-        
-        return $this->makeResponse($response);
     }
     
     /**
@@ -100,9 +95,7 @@ class Client
      */
     public function getTextStatus($hash)
     {
-        $response = $this->execHttpRequest($this->makeUrl("api/text/{$hash}/status/"));
-        
-        return $this->makeResponse($response);
+        return $this->execHttpRequest($this->makeUrl("api/text/{$hash}/status/"));
     }
     
     /**
@@ -113,9 +106,7 @@ class Client
      */
     public function getResult($hash)
     {
-        $response = $this->execHttpRequest($this->makeUrl("api/text/{$hash}/result/"));
-        
-        return $this->makeResponse($response);
+        return $this->execHttpRequest($this->makeUrl("api/text/{$hash}/result/"));
     }
     
     /**
@@ -126,9 +117,7 @@ class Client
      */
     public function getPlagiarismPercent($hash)
     {
-        $response = $this->execHttpRequest($this->makeUrl("api/text/{$hash}/plagiarism-percent/"));
-        
-        return $this->makeResponse($response);
+        return $this->execHttpRequest($this->makeUrl("api/text/{$hash}/plagiarism-percent/"));
     }
     
     /**
@@ -139,16 +128,14 @@ class Client
      */
     public function getText($hash)
     {
-        $response = $this->execHttpRequest($this->makeUrl('api/text/' . $hash));
-        
-        return $this->makeResponse($response);
+        return $this->execHttpRequest($this->makeUrl('api/text/' . $hash));
     }
     
     /**
      *
      * @param string $url
      * @param string $postData
-     * @return \stdClass 
+     * @return Response 
      */
     private function execHttpRequest($url, $postData = null)
     {
@@ -169,25 +156,19 @@ class Client
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         
         $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         
-        return json_decode($result);
-    }
-    
-    /**
-     *
-     * @param \stdClass $rawResponse
-     * @return Response
-     */
-    private function makeResponse($rawResponse)
-    {
+        $rawResponse = json_decode($result);
+        
         if (!is_object($rawResponse))
         {
             throw new \Exception('Wrong response was got.');
         }
         
-        return new Response($rawResponse->status, $rawResponse->message, $rawResponse->data);
+        return new Response($httpCode, $rawResponse->message, $rawResponse->data);
     }
+    
     /**
      * Create api url
      * 
@@ -197,88 +178,5 @@ class Client
     private function makeUrl($uri)
     {
         return sprintf("https://%s/%s", $this->apiDomain, $uri);
-    }
-}
-
-
-/**
- * Response for REST client
- * 
- */
-class Response
-{
-    const OK = 200;
-    const UNAUTHORIZED = 401;
-    const FORBIDDEN = 403;
-    const NOT_FOUND = 404;
-    const INTERNAL_SERVER_ERROR = 500;
-    const SERVICE_UNAVAILABLE = 503;
-    
-    
-    private $status;
-    private $message;
-    private $data;
-    
-    /**
-     *
-     * @param int $status
-     * @param string $message
-     * @param mixed $data 
-     */
-    public function __construct($status, $message, $data)
-    {
-        $this->status = $status;
-        $this->message = $message;
-        $this->data = $data;
-    }
-    
-    /**
-     * 
-     * 
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-    
-    /**
-     * 
-     * 
-     * @return mixed 
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-    
-    /**
-     * 
-     * 
-     * @return int 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-    
-    /**
-     * Returns true if last response was successful
-     * 
-     * @return bool 
-     */
-    public function isSuccessfully()
-    {
-        return $this->status == self::OK;
-    }
-    
-    /**
-     * Returns true if happened temporary error
-     * 
-     * @return bool 
-     */
-    public function isTemporaryError()
-    {
-        return $this->status == self::SERVICE_UNAVAILABLE;
     }
 }
