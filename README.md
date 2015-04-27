@@ -4,9 +4,9 @@ Installation
 ----------------------
 
 ```json
-    {
-        "require": {
-            "plagtracker/api-client": "0.0.*"
-        }
+{
+    "require": {
+        "plagtracker/api-client": "0.0.*"
     }
+}
 ```
