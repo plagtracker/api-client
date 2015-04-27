@@ -25,7 +25,7 @@ $client = new \Plagtracker\Api\Client('login', 'password');
 $response = $client->addTextForChecking('text');
 if($response->isSuccessfully())
 {
-    $hash = $response->getData();
+    $hash = $response->getData()->hash;
 }
 else
 {
@@ -64,14 +64,17 @@ else
 
 ### Get result
 ```php
-$response = $client->getResult($hash);
-if($response->isSuccessfully())
+if($completedPercent == 100)
 {
-    $result = $response->getData();
-}
-else
-{
-    echo 'ERROR: ' . $response->getMessage();
+    $response = $client->getResult($hash);
+    if($response->isSuccessfully())
+    {
+        $result = $response->getData();
+    }
+    else
+    {
+        echo 'ERROR: ' . $response->getMessage();
+    }
 }
 ```
 <br>
