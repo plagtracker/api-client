@@ -2,10 +2,11 @@
 
 Installation
 ----------------------
-    ``` json
+
+```json
     {
         "require": {
             "plagtracker/api-client": "0.0.*"
         }
     }
-    ```
+```
