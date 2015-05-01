@@ -45,17 +45,14 @@ class Client
      *
      * @apiParam {String} text Text wich should be checked for plagiarism.
      *
-     * @apiSuccess {Object} data Data of response
-     * @apiSuccess {String} data.hash Unique hash of added text.
+     * @apiSuccess {String} data Unique hash of added text.
      * @apiSuccess {String} message Message which api can send to client. Usually if error happens.
      * 
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
      *      "message": "OK",
-     *      "data": {
-     *          "hash": "f00cdac492b59749e8ea7436cd7c8a96"
-     *      }
+     *      "data": "f00cdac492b59749e8ea7436cd7c8a96"
      * }
      */ 
     /** 

@@ -25,7 +25,7 @@ $client = new \Plagtracker\Api\Client('login', 'password');
 $response = $client->addTextForChecking('text');
 if($response->isSuccessfully())
 {
-    $hash = $response->getData()->hash;
+    $hash = $response->getData();
 }
 else
 {

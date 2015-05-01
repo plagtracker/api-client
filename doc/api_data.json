@@ -37,16 +37,9 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>Data of response</p> "
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "data.hash",
+            "field": "data",
             "description": "<p>Unique hash of added text.</p> "
           },
           {
@@ -61,7 +54,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n     \"message\": \"OK\",\n     \"data\": {\n         \"hash\": \"f00cdac492b59749e8ea7436cd7c8a96\"\n     }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n     \"message\": \"OK\",\n     \"data\": \"f00cdac492b59749e8ea7436cd7c8a96\"\n}",
           "type": "json"
         }
       ]
