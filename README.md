@@ -1,5 +1,10 @@
 # PHP client for api.plagtracker.com
 
+Api documentation
+----------------------
+
+http://plagtracker.github.io/api-client/
+
 Installation
 ----------------------
 
