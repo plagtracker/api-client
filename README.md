@@ -11,7 +11,7 @@ Installation
 ```json
 {
     "require": {
-        "plagtracker/api-client": "0.0.*"
+        "plagtracker/api-client": "0.1.*"
     }
 }
 ```
